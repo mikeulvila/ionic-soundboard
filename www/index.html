@@ -28,12 +28,25 @@
 
     <ion-pane ng-controller="SoundBoardCtrl">
     	<ion-header-bar class="bar-energized" >
-    		<h1 class="title" >Soundboard</h1>
-        <button class="button button-clear button-positive">Edit</button>
+
+        <div class="buttons">
+          <button class="button button-icon ion-ios-minus-outline"
+                  ng-click="model.showDelete = !model.showDelete; model.showMove = false">Edit
+          </button>
+        </div>
+
+        <h1 class="title" >Soundboard</h1>
+
+        <div class="buttons">
+          <button class="button button-icon ion-ios-minus-outline"
+                  ng-click="model.showMove = !model.showMove; model.showDelete = false">Move
+          </button>
+        </div>
+
     	</ion-header-bar >
     	<ion-content >
 
-    		<ion-list >
+    		<ion-list show-delete="model.showDelete" show-reorder="model.showMove" >
     			<ion-item class="item-avatar item-icon-right"
                     ng-repeat="sound in model.sounds"
                     ng-click="play(sound)">
@@ -41,6 +54,8 @@
             <h2>{{ sound.title }}</h2>
             <p>{{ sound.desc }}</p>
             <i class="icon ion-volume-high"></i>
+            <ion-delete-button class="ion-minus-circle"></ion-delete-button>
+            <ion-reorder-button class="ion-navicon"></ion-reorder-button>
           </ion-item>
     		</ion-list >
 
