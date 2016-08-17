@@ -13,7 +13,7 @@ app.run(function ($ionicPlatform) {
 	});
 });
 
-app.controller('SoundBoardCtrl', function ($scope) {
+app.controller('SoundBoardCtrl', function ($scope, $window) {
 
 	$scope.media = null;
 
@@ -67,15 +67,34 @@ app.controller('SoundBoardCtrl', function ($scope) {
 	};
 
 	$scope.play = function (sound) {
-
+    // pause media sound if its playing
     if ($scope.media) {
       $scope.media.pause();
     }
 
-    $scope.media = new Audio();
-    $scope.media.src = sound.file;
-    $scope.media.load();
-    $scope.media.play();
+    // check for cordova
+    if ($window.cordova) {
+
+      ionic.Platform.ready(function() {
+
+        // check for android
+        var src = sound.file;
+        if (ionic.Platform.is('android')) {
+          src = '/android_asset/www/' + src;
+        }
+        // use media plugin if on cordova
+        $scope.media = new $window.Media(src);
+        $scope.media.play();
+      });
+
+    } else { // else use html5 player
+      $scope.media = new Audio();
+      $scope.media.src = sound.file;
+      $scope.media.load();
+      $scope.media.play();
+    }
+
+
 	};
 
 });
